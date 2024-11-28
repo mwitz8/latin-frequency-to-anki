@@ -8,8 +8,8 @@ from cltk.dependency.processes import LatinStanzaProcess
 from cltk.data.fetch import FetchCorpus
 
 corpus_downloader = FetchCorpus(language="lat")
-corpus_downloader.import_corpus('lat_text_latin_library', suppress_banner=True)
-cltk_nlp = NLP(language="lat")
+corpus_downloader.import_corpus('lat_text_latin_library')
+cltk_nlp = NLP(language="lat", suppress_banner=True)
 cltk_nlp.pipeline.processes[1]
 cltk_nlp.pipeline.processes[1] = LatinStanzaProcess
 
