@@ -11,7 +11,7 @@ corpus_downloader = FetchCorpus(language="lat")
 corpus_downloader.import_corpus('lat_text_latin_library')
 cltk_nlp = NLP(language="lat", suppress_banner=True)
 cltk_nlp.pipeline.processes[1]
-nlp.pipeline.processes[1] = LatinStanzaProcess
+cltk_nlp.pipeline.processes[1] = LatinStanzaProcess
 
 file_count = 0
 for file_path in Path(os.path.join(os.path.expanduser('~'), 'cltk_data', 'lat', 'text', 'lat_text_latin_library')).rglob('*.txt'):
