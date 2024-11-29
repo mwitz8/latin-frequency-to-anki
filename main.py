@@ -7,8 +7,6 @@ from cltk import NLP
 from cltk.dependency.processes import LatinStanzaProcess
 from cltk.data.fetch import FetchCorpus
 
-corpus_downloader = FetchCorpus(language="lat")
-corpus_downloader.import_corpus('lat_text_latin_library')
 cltk_nlp = NLP(language="lat", suppress_banner=True)
 cltk_nlp.pipeline.processes[1]
 cltk_nlp.pipeline.processes[1] = LatinStanzaProcess
@@ -19,16 +17,16 @@ def serialize_cltk_doc(cltk_doc, file_path: Path):
     pickle.dump(cltk_doc, file)
     file.close()
 
-file_count = 0
-for file_path in Path(os.path.expanduser('~'), 'cltk_data', 'lat', 'text', 'lat_text_latin_library').rglob('*.txt'):
-    file_count = file_count + 1
-with Bar('analyzing texts', max=file_count) as progress:
-    print('\n')
-    for file_path_str in Path(os.path.expanduser('~'), 'cltk_data', 'lat', 'text', 'lat_text_latin_library').rglob('*.txt'):
-        with open(file_path_str, 'r') as file:
-            file_path = Path(file_path_str)
-            new_file_path = Path(os.getcwd(), 'data', 'cltk_docs', *list(file_path.parts)[list(file_path.parts).index('lat'):]).with_suffix('.cltk')
-            if not new_file_path.exists():
-                cltk_doc = cltk_nlp.analyze(text=file.read())
-                serialize_cltk_doc(cltk_doc, new_file_path)
+text_count = 0
+corpus_path = Path(os.getcwd(), 'data', 'latin', 'text', 'historical')
+for text_path_str in corpus_path.rglob('*.txt'):
+    text_count = text_count + 1
+with Bar('analyzing texts', max=text_count) as progress:
+    for text_path_str in corpus_path.rglob('*.txt'):
+        with open(text_path_str, 'r') as text:
+            text_path = Path(text_path_str)
+            data_path = Path(*(list(text_path.parts)[:text_path.parts.index('historical')+1] + ['cltk_data'] + list(text_path.parts[text_path.parts.index('historical')+1:]))).with_suffix('.cltk')
+            if not data_path.exists():
+                cltk_doc = cltk_nlp.analyze(text=text.read())
+                serialize_cltk_doc(cltk_doc, data_path)
         progress.next()
