@@ -3,6 +3,7 @@ from pathlib import Path
 import pickle
 from progress.bar import Bar
 from progress.spinner import PieSpinner
+import argparse
 from cltk import NLP
 from cltk.dependency.processes import LatinStanzaProcess
 from cltk.data.fetch import FetchCorpus
@@ -17,8 +18,17 @@ def serialize_cltk_doc(cltk_doc, file_path: Path):
     pickle.dump(cltk_doc, file)
     file.close()
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--overwrite", action='store_true')
+args = parser.parse_args()
+if args.overwrite:
+    data_path = Path(os.getcwd(), 'data', 'latin', 'text', 'historical', 'cltk_data')
+    for path_str in data_path.rglob('*'):
+        shutil.rmtree(path_str)
+
 text_count = 0
 corpus_path = Path(os.getcwd(), 'data', 'latin', 'text', 'historical')
+if '--overwrite' in 
 for text_path_str in corpus_path.rglob('*.txt'):
     text_count = text_count + 1
 with Bar('analyzing texts', max=text_count) as progress:
