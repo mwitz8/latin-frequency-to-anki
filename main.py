@@ -28,7 +28,6 @@ if args.overwrite:
 
 text_count = 0
 corpus_path = Path(os.getcwd(), 'data', 'latin', 'text', 'historical')
-if '--overwrite' in 
 for text_path_str in corpus_path.rglob('*.txt'):
     text_count = text_count + 1
 with Bar('analyzing texts', max=text_count) as progress:
